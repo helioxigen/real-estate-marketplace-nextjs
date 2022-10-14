@@ -1,44 +1,46 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Modal from 'react-modal';
-import { CallbackForm } from '@components/Forms';
-import { IconButton } from '@components/UI';
-import { media, sc } from '@utils';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Modal from "react-modal";
+import { CallbackForm } from "@components/Forms";
+import { IconButton } from "@components/UI";
+import { media, sc, scroll } from "@utils";
 
 const CallbackModal = ({
-    className,
-    children = () => {},
-    fields,
-    submitLabel,
-    title = 'Обратный звонок',
-    subheader = 'Оставьте свою заявку и наш менеджер свяжется с вами в течение 30 минут.',
-    comment = '',
+  className,
+  children = () => {},
+  fields,
+  submitLabel,
+  title = "Обратный звонок",
+  subheader = "Оставьте свою заявку и наш менеджер свяжется с вами в течение 30 минут.",
+  comment = ""
 }) => {
-    const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
-    return (
-        <>
-            {children(() => setIsOpen(true))}
-            <Modal
-                isOpen={isOpen}
-                onRequestClose={() => setIsOpen(false)}
-                shouldCloseOnEsc
-                shouldCloseOnOverlayClick
-                bodyOpenClassName="scroll-locked"
-                overlayClassName={className}
-                className="modal"
-            >
-                <IconButton onClick={() => setIsOpen(false)} icon="times" secondary />
-                <CallbackForm
-                    title={title}
-                    fields={fields}
-                    subheader={subheader}
-                    submitLabel={submitLabel}
-                    defaultComment={`[${title}] ${comment}`}
-                />
-            </Modal>
-        </>
-    );
+  return (
+    <>
+      {children(() => setIsOpen(true))}
+      <Modal
+        preventScroll
+        isOpen={isOpen}
+        onAfterOpen={scroll.disable}
+        onAfterClose={scroll.enable}
+        onRequestClose={() => setIsOpen(false)}
+        shouldCloseOnEsc
+        shouldCloseOnOverlayClick
+        overlayClassName={className}
+        className="modal"
+      >
+        <IconButton onClick={() => setIsOpen(false)} icon="times" secondary />
+        <CallbackForm
+          title={title}
+          fields={fields}
+          subheader={subheader}
+          submitLabel={submitLabel}
+          defaultComment={`[${title}] ${comment}`}
+        />
+      </Modal>
+    </>
+  );
 };
 
 export default styled(CallbackModal)`
@@ -100,9 +102,9 @@ export default styled(CallbackModal)`
         }
 
         ${media.desktop.at(
-            css => css`
-                padding: 32px 24px;
-            `
+          css => css`
+            padding: 32px 24px;
+          `
         )}
     }
 `;
